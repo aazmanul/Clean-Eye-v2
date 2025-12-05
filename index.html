@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>চোখের হেফাজত চ্যালেঞ্জ</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-teal: #00897B; /* Beautiful Teal */
+            --primary-dark: #00695C;
+            --ceramic-white: #FAFAFA;
+            --ceramic-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --text-color: #37474F;
+            --locked-gray: #CFD8DC;
+            --success-green: #26A69A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+
+        body {
+            background-color: #ECEFF1;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Hero Section */
+        header {
+            width: 100%;
+            background-color: var(--primary-teal);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            box-shadow: var(--ceramic-shadow);
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            padding: 0 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Timer Display & Button */
+        .control-panel {
+            background-color: var(--ceramic-white);
+            padding: 25px;
+            border-radius: 16px;
+            width: 100%;
+            text-align: center;
+            box-shadow: var(--ceramic-shadow);
+            margin-bottom: 30px;
+            /* Ceramic Feel: Matte finish, no glass blur */
+            border: 1px solid rgba(255,255,255,0.5);
+        }
+
+        .timer-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-teal);
+            margin-bottom: 15px;
+            display: none; /* Hidden by default */
+        }
+
+        .start-btn {
+            background-color: var(--primary-teal);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 137, 123, 0.3);
+        }
+
+        .start-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .start-btn:active {
+            transform: translateY(0);
+        }
+
+        .reset-btn {
+            margin-top: 10px;
+            background: none;
+            border: none;
+            color: #90A4AE;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: underline;
+            display: none;
+        }
+
+        /* Grid Layout for Cards */
+        .milestone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        /* Card Design */
+        .card {
+            background-color: var(--locked-gray);
+            color: #78909C;
+            padding: 15px 10px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); /* Slightly recessed look */
+            transition: all 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 80px;
+            border: 2px solid transparent;
+        }
+
+        .card small {
+            font-size: 0.75rem;
+            font-weight: 400;
+            margin-top: 5px;
+        }
+
+        /* Completed State */
+        .card.completed {
+            background-color: var(--success-green);
+            color: white;
+            box-shadow: 0 4px 10px rgba(38, 166, 154, 0.4);
+            transform: scale(1.02);
+            border: 2px solid white;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: auto;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9rem;
+            color: #78909C;
+            background-color: #E0F2F1;
+            width: 100%;
+            border-top: 1px solid #B2DFDB;
+        }
+
+        @media (max-width: 600px) {
+            .milestone-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            header h1 {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>চলুন চোখকে আল্লাহর সন্তুষ্টির জন্য হেফাজত করি</h1>
+    </header>
+
+    <div class="container">
+        <div class="control-panel">
+            <div id="timerDisplay" class="timer-display">
+                অতিক্রান্ত সময়: <span id="timeElapsed">00:00:00</span>
+            </div>
+            <button id="startBtn" class="start-btn" onclick="startChallenge()">Start Now (বিসমিল্লাহ)</button>
+            <button id="resetBtn" class="reset-btn" onclick="resetChallenge()">রিসেট করুন (আবার শুরু)</button>
+        </div>
+
+        <div class="milestone-grid" id="gridContainer">
+            </div>
+    </div>
+
+    <footer>
+        <p>হে আল্লাহ এই চ্যালেঞ্জ আমাকে বাঁচাতে পারবে না যতক্ষণ না তুমি আমাকে সাহায্য কর, কারণ আমি দুর্বল, আমার ইচ্ছাশক্তিও দুর্বল কারণ লা হাওলা ওয়ালা কুওয়াতা ইল্লা বিল্লাহ!
+
+তুমি আমাকে সাহায্য করলেই আমি আমার চোখকে হেফাজত করতে পারবো। হে আল্লাহ তুমি আমাকে সাহায্য করো। অশ্লীলতার এই দৃষ্টি মোকাবেলা, শয়তানের সাথে এ লড়াই তোমার সাহায্য ছাড়া অসম্ভব।
+
+শয়তানের সাথে প্রতিনিয়ত যুদ্ধ করে যাচ্ছি! হে আল্লাহ, শয়তানের ডাকে যেন সাড়া না দিয়ে বসি সে জন্য আমি তোমার উপর ভরসা করলাম।
+
+আলহামদুলিল্লাহি রাব্বিল আলামিন। 
+
+সাল্লাল্লাহু আলাইহি ওয়াসাল্লাম। 
+
+আমিন। </p>
+    </footer>
+
+    <script>
+        // Configuration
+        // Time in hours converted to milliseconds (hr * 60 * 60 * 1000)
+        // Time in days converted to milliseconds (day * 24 * 60 * 60 * 1000)
+        const ONE_HOUR = 3600000;
+        const ONE_DAY = 86400000;
+
+        const milestones = [
+            { label: '৬ ঘণ্টা', time: 6 * ONE_HOUR },
+            { label: '১২ ঘণ্টা', time: 12 * ONE_HOUR },
+            { label: '১ দিন', time: 1 * ONE_DAY },
+            { label: '৩ দিন', time: 3 * ONE_DAY },
+            { label: '৭ দিন', time: 7 * ONE_DAY },
+            { label: '১০ দিন', time: 10 * ONE_DAY },
+            { label: '১৫ দিন', time: 15 * ONE_DAY },
+            { label: '৩০ দিন', time: 30 * ONE_DAY },
+            { label: '৪০ দিন', time: 40 * ONE_DAY },
+            { label: '৫০ দিন', time: 50 * ONE_DAY },
+            { label: '৭৫ দিন', time: 75 * ONE_DAY },
+            { label: '৮০ দিন', time: 80 * ONE_DAY },
+            { label: '৯০ দিন', time: 90 * ONE_DAY },
+            { label: '১০০ দিন', time: 100 * ONE_DAY },
+            { label: '১০৭ দিন', time: 107 * ONE_DAY },
+            { label: '১১০ দিন', time: 110 * ONE_DAY },
+            { label: '১১৫ দিন', time: 115 * ONE_DAY },
+            { label: '১৩০ দিন', time: 130 * ONE_DAY },
+            { label: '১৪০ দিন', time: 140 * ONE_DAY },
+            { label: '১৫০ দিন', time: 150 * ONE_DAY },
+            { label: '১৮০ দিন', time: 180 * ONE_DAY },
+            { label: '২০০ দিন', time: 200 * ONE_DAY },
+            { label: '২৫০ দিন', time: 250 * ONE_DAY },
+            { label: '৩০০ দিন', time: 300 * ONE_DAY },
+            { label: '৩৩০ দিন', time: 330 * ONE_DAY },
+            { label: '৩৬৫ দিন', time: 365 * ONE_DAY }
+        ];
+
+        const startBtn = document.getElementById('startBtn');
+        const resetBtn = document.getElementById('resetBtn');
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timeElapsedSpan = document.getElementById('timeElapsed');
+        const gridContainer = document.getElementById('gridContainer');
+
+        let intervalId;
+
+        // Initialize App
+        function init() {
+            renderCards();
+            checkStatus();
+        }
+
+        // Generate HTML for cards
+        function renderCards() {
+            gridContainer.innerHTML = '';
+            milestones.forEach((ms, index) => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.id = `card-${index}`;
+                card.innerHTML = `
+                    <span>${ms.label}</span>
+                    <small>ইনশাআল্লাহ</small>
+                `;
+                gridContainer.appendChild(card);
+            });
+        }
+
+        // Check LocalStorage and update UI
+        function checkStatus() {
+            const startTime = localStorage.getItem('gazeGuardStart');
+            
+            if (startTime) {
+                // Challenge is running
+                startBtn.style.display = 'none';
+                timerDisplay.style.display = 'block';
+                resetBtn.style.display = 'inline-block';
+                
+                // Start live timer
+                startTimerLoop(parseInt(startTime));
+            } else {
+                // Challenge hasn't started
+                startBtn.style.display = 'inline-block';
+                timerDisplay.style.display = 'none';
+                resetBtn.style.display = 'none';
+            }
+        }
+
+        // Start Button Action
+        function startChallenge() {
+            const now = new Date().getTime();
+            localStorage.setItem('gazeGuardStart', now);
+            checkStatus();
+        }
+
+        // Reset Action (Hidden mainly, strictly for restart)
+        function resetChallenge() {
+            if(confirm("আপনি কি নিশ্চিত যে আপনি সময় রিসেট করতে চান? এটি আপনার বর্তমান অগ্রগতি মুছে ফেলবে।")) {
+                localStorage.removeItem('gazeGuardStart');
+                clearInterval(intervalId);
+                
+                // Reset cards visuals
+                const cards = document.querySelectorAll('.card');
+                cards.forEach(c => {
+                    c.classList.remove('completed');
+                    c.querySelector('small').innerText = 'লক করা';
+                });
+
+                checkStatus();
+            }
+        }
+
+        // The main loop
+        function startTimerLoop(startTime) {
+            // Update immediately
+            updateProgress(startTime);
+
+            // Update every second
+            if (intervalId) clearInterval(intervalId);
+            intervalId = setInterval(() => {
+                updateProgress(startTime);
+            }, 1000);
+        }
+
+        function updateProgress(startTime) {
+            const now = new Date().getTime();
+            const elapsed = now - startTime;
+
+            // Update Timer Text
+            timeElapsedSpan.innerText = formatTime(elapsed);
+
+            // Update Cards
+            milestones.forEach((ms, index) => {
+                const card = document.getElementById(`card-${index}`);
+                if (elapsed >= ms.time) {
+                    if (!card.classList.contains('completed')) {
+                        card.classList.add('completed');
+                        card.querySelector('small').innerText = 'সম্পন্ন হয়েছে';
+                    }
+                }
+            });
+        }
+
+        // Helper to format milliseconds into readable time
+        function formatTime(ms) {
+            const seconds = Math.floor((ms / 1000) % 60);
+            const minutes = Math.floor((ms / (1000 * 60)) % 60);
+            const hours = Math.floor((ms / (1000 * 60 * 60)) % 24);
+            const days = Math.floor(ms / (1000 * 60 * 60 * 24));
+
+            const dStr = days > 0 ? days + " দিন " : "";
+            return `${dStr}${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+        }
+
+        function pad(num) {
+            return num.toString().padStart(2, '0');
+        }
+
+        // Run on load
+        init();
+
+    </script>
+</body>
+</html>
